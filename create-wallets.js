@@ -1,17 +1,12 @@
 const { Keypair } = require("@solana/web3.js");
-const { generateMnemonic, mnemonicToSeedSync } = require("bip39");
-const nacl = require("tweetnacl");
 
 function createSolanaWallets(count) {
     let wallets = [];
     for (let i = 0; i < count; i++) {
-        let mnemonic = generateMnemonic();
-        let seed = mnemonicToSeedSync(mnemonic).slice(0, 32);
-        let keypair = Keypair.fromSeed(seed);
-        
+        let wallet = Keypair.generate();
         wallets.push({
-            address: keypair.publicKey.toBase58(),
-            mnemonic: mnemonic
+            address: wallet.publicKey.toBase58(),
+            privateKey: Buffer.from(wallet.secretKey).toString("hex")
         });
     }
     return wallets;
